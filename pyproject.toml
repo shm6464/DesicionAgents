@@ -1,0 +1,44 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "decisionagents"
+dynamic = ["version"]
+description = "DecisionAgents: Multi-Agent LLM Decision System"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "langchain-core>=1.6.5",
+    "langchain-anthropic>=1.7.4",
+    "langchain-google-genai>=4.4.0",
+    "langchain-openai>=1.6.6",
+    "langgraph>=1.2.12",
+    "langgraph-checkpoint-sqlite>=3.1.1",
+    "pandas>=3.0.6",
+    "python-dotenv>=1.0.0",
+    "pytz>=2025.2",
+    "requests>=2.32.4",
+    "stockstats>=0.6.5",
+    "typing-extensions>=4.14.0",
+    "yfinance>=1.7.0",
+]
+
+[project.optional-dependencies]
+# Redis-backed response cache (tradingagents/cache.py). The default disk cache
+# needs no extra deps; install this only to use cache_backend="redis".
+redis = [
+    "redis>=5.0.0",
+]
+# Web UI (webapp.py). Streamlit only; the analysis logic is the same code the
+# pipeline runs. Install with: pip install "decisionagents[ui]", then:
+# streamlit run webapp.py
+ui = [
+    "streamlit>=1.40.0",
+]
+
+[tool.setuptools.dynamic]
+version = {attr = "tradingagents.__version__"}
+
+[tool.setuptools.packages.find]
+include = ["tradingagents*"]
