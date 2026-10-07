@@ -155,7 +155,7 @@ _TICKER_PATH_RE = re.compile(r"^[A-Za-z0-9._\-\^=+]+$")
 def safe_ticker_component(value: str, *, max_len: int = 32) -> str:
     """Validate ``value`` is safe to interpolate into a filesystem path.
 
-    Tickers come from user CLI input or from LLM tool calls, both of which
+    Tickers come from user Web UI input or from LLM tool calls, both of which
     can be influenced by attacker-controlled content (e.g. prompt injection
     embedded in fetched news). Without validation, a value like
     ``"../../../etc/foo"`` flows into ``os.path.join`` / ``Path /`` and

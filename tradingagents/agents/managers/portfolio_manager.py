@@ -3,7 +3,7 @@
 Uses LangChain's ``with_structured_output`` so the LLM produces a typed
 ``PortfolioDecision`` directly, in a single call. Its rating is the run's
 ``final_rating``, and the decision is rendered to markdown as
-``final_trade_decision`` for the memory log, CLI display and saved reports.
+``final_trade_decision`` for the memory log, Web UI display and saved reports.
 When a provider does not expose structured output, the agent falls back to
 free-text generation and the rating is read from that text.
 """

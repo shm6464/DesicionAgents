@@ -53,7 +53,7 @@ logger = logging.getLogger(__name__)
 #
 # Domestic models (Qwen / DeepSeek / GLM / Kimi) are sourced from the single
 # authoritative tier+price table in ``llm_clients.model_catalog`` (stage 4), so
-# the tiering and prices cannot drift between the UI, the tracker, and the CLI.
+# the tiering and prices cannot drift between the Web UI, the tracker, and programmatic callers.
 # Native OpenAI models have no domestic tier entry and stay inline here.
 _OPENAI_PRICES: dict[str, dict[str, float]] = {
     "gpt-6-luna":     {"input": 0.40, "output": 1.60},

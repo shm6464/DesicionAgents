@@ -1,4 +1,4 @@
-"""Streamlit Web UI for TradingAgents.
+"""Streamlit Web UI for DecisionAgents.
 
 A lightweight browser front-end over the existing analysis pipeline. It reuses
 ``TradingAgentsGraph.propagate()`` and ``save_reports()`` — it does NOT
@@ -14,8 +14,8 @@ Install the UI extras first:
     pip install "tradingagents[ui]"
 
 The provider, models, rounds and every other knob are read from the same
-``DEFAULT_CONFIG`` / ``TRADINGAGENTS_*`` environment the CLI uses, so a run made
-here behaves exactly like ``tradingagents --ticker X --date Y``.
+``DEFAULT_CONFIG`` / ``TRADINGAGENTS_*`` environment, so a run made here uses
+the exact same configuration as a programmatic ``propagate()`` call.
 """
 from __future__ import annotations
 
@@ -305,9 +305,8 @@ def main():
             "风控讨论轮数 (max_risk_discuss_rounds)", min_value=1, max_value=10,
             value=int(DEFAULT_CONFIG["max_risk_discuss_rounds"]),
         )
-        # Default to English to match DEFAULT_CONFIG["output_language"] and the
-        # CLI, so a run through the UI and a run through the CLI produce the same
-        # language. The old default (index=1 -> "Chinese") let the research /
+        # Default to English to match DEFAULT_CONFIG["output_language"], so runs
+        # through the Web UI and programmatic calls produce the same language. The old default (index=1 -> "Chinese") let the research /
         # portfolio managers emit Chinese while the analysts (served from the
         # English response cache) stayed English, producing a mixed report.
         output_language = st.selectbox("报告语言", ["English", "Chinese"], index=0)
@@ -325,7 +324,7 @@ def main():
 
     config = _build_config(provider, deep_llm, quick_llm, debate_rounds, risk_rounds, output_language)
 
-    # Show what is about to run, mirroring the CLI's pre-run summary.
+    # Show what is about to run, mirroring the pre-run summary.
     st.markdown(
         f"- **Ticker**: `{ticker}` · **日期**: `{trade_date}`\n"
         f"- **Provider**: `{provider}` · deep=`{deep_llm}` · quick=`{quick_llm}`\n"

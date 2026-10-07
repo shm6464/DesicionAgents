@@ -170,8 +170,8 @@ class TradingAgentsGraph:
         Deterministic yfinance lookup (cached, fail-open) injected into a
         context string so every agent anchors to the real company instead of
         hallucinating one from the price chart (#814). Both the propagate()
-        path and the CLI call this so the resolved identity reaches the whole
-        graph regardless of entry point.
+        path and other entry points call this so the resolved identity reaches
+        the whole graph regardless of entry point.
         """
         identity = resolve_instrument_identity(ticker)
         return build_instrument_context(ticker, asset_type, identity, trade_date)
@@ -215,7 +215,7 @@ class TradingAgentsGraph:
         """Run the trading agents graph for a company on a specific date.
 
         ``asset_type`` selects between the stock pipeline (default) and the
-        crypto pipeline (``"crypto"``) shipped in #567 — the CLI auto-detects
+        crypto pipeline (``"crypto"``) shipped in #567 — the Web UI auto-detects
         from the ticker; programmatic callers pass it explicitly. When
         ``checkpoint_enabled`` is set in config, the graph is recompiled with
         a per-ticker SqliteSaver so a crashed run can resume from the last
@@ -242,9 +242,9 @@ class TradingAgentsGraph:
         when checkpointing is disabled).
 
         Pair every call with :meth:`end_checkpoint` in a ``finally``. Both
-        ``propagate`` (via :meth:`checkpoint_scope`) and the CLI stream path use
-        this so ``--checkpoint`` actually resumes (#1249); previously the setup
-        lived only inside ``propagate`` and the CLI streamed the checkpointer-less
+        ``propagate`` (via :meth:`checkpoint_scope`) and the stream path use
+        this so checkpointing actually resumes (#1249); previously the setup
+        lived only inside ``propagate`` and streaming used the checkpointer-less
         graph, making the flag a no-op.
         """
         self._resuming = False
@@ -320,9 +320,9 @@ class TradingAgentsGraph:
         }
 
     def save_reports(self, final_state, ticker, save_path=None) -> Path:
-        """Write the markdown report tree for a completed run, like the CLI does.
+        """Write the markdown report tree for a completed run.
 
-        Programmatic callers get the same on-disk reports the CLI produces. Pass
+        Programmatic callers and the Web UI get the same on-disk reports. Pass
         an explicit ``save_path`` or let it default under ``results_dir``.
         """
         if save_path is None:
@@ -363,7 +363,7 @@ class TradingAgentsGraph:
             return None
 
     def create_run_state(self, company_name, trade_date, asset_type: str = "stock", portfolio=None):
-        """Build a run's initial state; propagate() and the CLI both start here.
+        """Build a run's initial state; propagate() and other entry points both start here.
 
         Settles this ticker's pending decisions first, then injects the lessons
         known by the trade date for the Portfolio Manager (#1251) and the
@@ -395,7 +395,7 @@ class TradingAgentsGraph:
 
     def record_decision(self, company_name, trade_date, final_state):
         """Record a finished run: its state log, and its decision in the memory log
-        for reflection on the next same-ticker run. propagate() and the CLI both end here."""
+        for reflection on the next same-ticker run. propagate() and other entry points both end here."""
         self._log_state(trade_date, final_state)
         decision = final_state.get("final_trade_decision")
         if not decision:
@@ -508,7 +508,7 @@ class TradingAgentsGraph:
 
         # A ticker that would escape the results directory is rejected.
         safe_ticker = safe_ticker_component(final_state["company_of_interest"])
-        directory = Path(self.config["results_dir"]) / safe_ticker / "TradingAgentsStrategy_logs"
+        directory = Path(self.config["results_dir"]) / safe_ticker / "DecisionAgentsStrategy_logs"
         directory.mkdir(parents=True, exist_ok=True)
 
         log_path = directory / f"full_states_log_{trade_date}.json"

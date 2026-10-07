@@ -1,11 +1,11 @@
 """Canonical provider -> API-key env-var mapping.
 
 A single source of truth for which environment variable holds the API
-key for each supported LLM provider. Used by the CLI's interactive key
-prompt (cli/prompts.ensure_api_key) and by anything else that needs to
-ask "does this provider require a key, and which env var is it?".
+key for each supported LLM provider. Used by the Web UI's key prompt
+and by anything else that needs to ask "does this provider require a
+key, and which env var is it?".
 
-When adding a new provider, register its env var here so the CLI flow
+When adding a new provider, register its env var here so the Web UI
 prompts for it automatically instead of failing on first API call.
 """
 
@@ -38,7 +38,7 @@ PROVIDER_API_KEY_ENV: dict[str, str | None] = {
     # Local runtimes do not authenticate.
     "ollama":     None,
     # Generic OpenAI-compatible endpoint: the client reads this when set (keyed
-    # relays), but it is marked key-optional in the provider registry so the CLI
+    # relays), but it is marked key-optional in the provider registry so the Web UI
     # never forces a prompt and keyless local servers still work.
     "openai_compatible": "OPENAI_COMPATIBLE_API_KEY",
 }

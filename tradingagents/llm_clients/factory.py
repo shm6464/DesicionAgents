@@ -88,7 +88,7 @@ def _coerce_max_tokens(value):
 
 
 def build_llm_kwargs(config: dict) -> dict[str, Any]:
-    """Keyword arguments for ``create_llm_client`` from a TradingAgents config."""
+    """Keyword arguments for ``create_llm_client`` from a DecisionAgents config."""
     kwargs = {}
     provider = config.get("llm_provider", "").lower()
 

@@ -11,7 +11,7 @@ from tradingagents.dataflows.net import get_scrubbed
 API_BASE_URL = "https://www.alphavantage.co/query"
 
 # Network timeout (seconds) so a stalled Alpha Vantage request can't hang the
-# CLI/agents indefinitely (#990).
+# Web UI/agents indefinitely (#990).
 REQUEST_TIMEOUT = 30
 
 

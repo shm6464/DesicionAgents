@@ -99,7 +99,7 @@ def _user_agent() -> str:
     so SEC can reach you about your traffic rather than the project.
     """
     configured = os.getenv("SEC_EDGAR_USER_AGENT", "").strip()
-    return configured or f"TradingAgents/{__version__} (contact@example.com)"
+    return configured or f"DecisionAgents/{__version__} (contact@example.com)"
 
 
 

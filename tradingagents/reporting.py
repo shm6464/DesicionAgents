@@ -1,9 +1,9 @@
-"""Reusable report-tree writer shared by the CLI and the programmatic API.
+"""Reusable report-tree writer shared by the Web UI and the programmatic API.
 
 Writes a run's per-section markdown (analysts, research, trading, risk,
 portfolio) plus a consolidated ``complete_report.md`` under ``save_path``. The
-CLI and ``TradingAgentsGraph.save_reports`` both call this, so a headless / API
-run produces the same on-disk report tree a CLI run does.
+Web UI and ``TradingAgentsGraph.save_reports`` both call this, so a headless / API
+run produces the same on-disk report tree a Web UI run does.
 """
 
 from datetime import datetime
@@ -12,13 +12,13 @@ from pathlib import Path
 
 def _header(ticker: str, final_state: dict, settings: dict | None) -> str:
     """The report's title and what produced it: analysis date, version, models, analysts, vendors."""
-    lines = [f"# Trading Analysis Report: {ticker}", ""]
+    lines = [f"# Decision Analysis Report: {ticker}", ""]
     if final_state.get("trade_date"):
         lines.append(f"- Analysis date: {final_state['trade_date']}")
     lines.append(f"- Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     if settings:
         s = settings.get
-        lines.append(f"- TradingAgents {s('version', '?')}: {s('llm_provider', '?')}, "
+        lines.append(f"- DecisionAgents {s('version', '?')}: {s('llm_provider', '?')}, "
                      f"deep {s('deep_think_llm', '?')}, quick {s('quick_think_llm', '?')}")
         lines.append(f"- Analysts: {', '.join(s('analysts') or [])}; "
                      f"research debate rounds {s('max_debate_rounds', '?')}, "
@@ -83,12 +83,12 @@ def write_report_tree(final_state: dict, ticker: str, save_path, settings: dict 
             content = "\n\n".join(f"### {name}\n{text}" for name, text in research_parts)
             sections.append(f"## II. Research Team Decision\n\n{content}")
 
-    # 3. Trading
+    # 3. Decision
     if final_state.get("trader_investment_plan"):
         trading_dir = save_path / "3_trading"
         trading_dir.mkdir(exist_ok=True)
         (trading_dir / "trader.md").write_text(final_state["trader_investment_plan"], encoding="utf-8")
-        sections.append(f"## III. Trading Team Plan\n\n### Trader\n{final_state['trader_investment_plan']}")
+        sections.append(f"## III. Trading Decision\n\n### Trader\n{final_state['trader_investment_plan']}")
 
     # 4. Risk Management
     if final_state.get("risk_debate_state"):

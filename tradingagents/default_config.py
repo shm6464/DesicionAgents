@@ -22,8 +22,8 @@ _ENV_OVERRIDES = {
     "TRADINGAGENTS_LLM_MAX_RETRIES":      "llm_max_retries",
     "TRADINGAGENTS_MAX_TOKENS":           "max_tokens",
     # Provider-specific reasoning/thinking knobs (None = each provider's own
-    # default). Settable here for non-interactive runs; the CLI also offers an
-    # interactive choice, which is skipped when the matching var is set.
+    # default). Settable here for non-interactive runs; the Web UI also offers
+    # an interactive choice, which is skipped when the matching var is set.
     "TRADINGAGENTS_GOOGLE_THINKING_LEVEL":   "google_thinking_level",
     "TRADINGAGENTS_OPENAI_REASONING_EFFORT": "openai_reasoning_effort",
     "TRADINGAGENTS_ANTHROPIC_EFFORT":        "anthropic_effort",
@@ -124,7 +124,7 @@ def build_default_config() -> dict:
         "quick_think_llm": "gpt-6-luna",
         # When None, each provider's client falls back to its own default endpoint
         # (api.openai.com for OpenAI, generativelanguage.googleapis.com for Gemini, ...).
-        # The CLI overrides this per provider when the user picks one. Keeping a
+        # The Web UI overrides this per provider when the user picks one. Keeping a
         # provider-specific URL here would leak (e.g. OpenAI's /v1 was previously
         # being forwarded to Gemini, producing malformed request URLs).
         "backend_url": None,

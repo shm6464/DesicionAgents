@@ -1,4 +1,4 @@
-"""Shared model catalog for CLI selections and validation."""
+"""Shared model catalog for Web UI selections and validation."""
 
 from __future__ import annotations
 
@@ -243,7 +243,7 @@ LEGACY_MODELS: dict[str, list[str]] = {
 
 
 def get_known_models() -> dict[str, list[str]]:
-    """Build known model names from the shared CLI catalog plus legacy IDs.
+    """Build known model names from the shared catalog plus legacy IDs.
 
     DashScope (the ``qwen`` / ``qwen-cn`` providers) also serves the domestic
     models in the tier table — ``qwen-max``, ``qwen3.6-flash``, ``glm-5``,
@@ -275,7 +275,7 @@ def get_known_models() -> dict[str, list[str]]:
 #
 # A single authoritative source for the "quick vs deep" split of domestic
 # models and their per-token list prices. The Web UI dropdown, the cost
-# tracker's price table, and (via get_cn_model_tiers) any future CLI preset all
+# tracker's price table, and (via get_cn_model_tiers) any future preset all
 # read from here, so the split and the prices cannot drift apart across files.
 #
 # ``quick`` — cheap, high-volume models for the many analyst / tool / reflection

@@ -268,7 +268,7 @@ class PortfolioDecision(BaseModel):
 def render_pm_decision(decision: PortfolioDecision) -> str:
     """Render a PortfolioDecision back to the markdown shape the rest of the system expects.
 
-    Memory log, CLI display, and saved report files all read this markdown,
+    Memory log, Web UI display, and saved report files all read this markdown,
     so the rendered output preserves the exact section headers (``**Rating**``,
     ``**Executive Summary**``, ``**Investment Thesis**``) that downstream
     parsers and the report writers already handle.

@@ -348,7 +348,7 @@ class ProviderSpec:
     different APIs) and are intentionally NOT in this registry.
 
     The API-key env var stays in ``api_key_env.PROVIDER_API_KEY_ENV`` (the single
-    source consulted by both this client and the CLI prompt); only behavior that
+    source consulted by both this client and the Web UI prompt); only behavior that
     is provider-specific (base URL, key optionality, wire-format quirks via
     ``chat_class``) lives here.
     """
