@@ -6,11 +6,15 @@ DecisionAgents 是一个基于 [LangGraph](https://github.com/langchain-ai/langg
 
 > DecisionAgents 仅用于研究目的。交易表现受所选基座模型、温度、交易周期、数据质量等多种非确定性因素影响，不构成任何金融、投资或交易建议。
 
-## 架构
+## 界面预览
 
 <p align="center">
-  <img src="assets/schema.png" style="width: 100%; height: auto;">
+  <img src="assets/webui_overview.png" style="width: 100%; height: auto;">
 </p>
+
+## 架构
+
+DecisionAgents 的流水线由 `TradingAgentsGraph` 驱动，依次经过以下阶段：
 
 ### 分析师团队
 
@@ -21,34 +25,18 @@ DecisionAgents 是一个基于 [LangGraph](https://github.com/langchain-ai/langg
 
 选中的分析师并行工作，各自调用自己的工具，所有报告就绪后启动研究辩论。
 
-<p align="center">
-  <img src="assets/analyst.png" width="100%" style="display: inline-block; margin: 0 2%;">
-</p>
-
 ### 研究员团队
 
 由多方（看多）与空方（看空）研究员组成，批判性地评估分析师团队提供的洞见。通过结构化辩论，在潜在收益与固有风险之间取得平衡。
-
-<p align="center">
-  <img src="assets/researcher.png" width="70%" style="display: inline-block; margin: 0 2%;">
-</p>
 
 ### 交易员智能体
 
 汇总分析师与研究员的报告，做出明智的交易决策，确定交易的时机与力度。
 
-<p align="center">
-  <img src="assets/trader.png" width="70%" style="display: inline-block; margin: 0 2%;">
-</p>
-
 ### 风控与基金经理
 
 - 风控团队由激进、保守、中性三方分析师组成，持续评估投资组合风险，向基金经理提供评估报告。
 - 基金经理批准/否决交易提案，输出最终决策。
-
-<p align="center">
-  <img src="assets/risk.png" width="70%" style="display: inline-block; margin: 0 2%;">
-</p>
 
 ## 安装
 
@@ -110,21 +98,58 @@ TYPESAFE_API_KEY=...        # Jev 舆情筛查（可选）
 
 `webapp.py` 是一个轻量浏览器前端，直接复用 `TradingAgentsGraph.propagate()` 与 `save_reports()`，不重写任何分析逻辑。
 
-左侧参数面板：
+### 参数面板
+
+左侧参数面板包含：
 
 - **股票代码 (ticker)**：如 `NVDA`、`0700.HK`、`600519.SS`，会走 yfinance 的 symbol 归一化。
 - **分析日期**：不能晚于今天；历史日期会触发 point-in-time 数据过滤。
 - **分析师团队**：勾选参与本次运行的分析师（行情 / 舆情 / 新闻 / 基本面）。
 - **模型与参数**：选择 LLM Provider、deep-think（强推理）与 quick-think（快速便宜）模型、辩论轮数与风控讨论轮数、报告语言。
 
-运行结果区展示：
+<p align="center">
+  <img src="assets/webui_params.png" width="60%" style="height: auto;">
+</p>
 
-- 最终评级徽章
-- Token 用量与成本看板（按层级、按模型分组）
-- 各分析师报告
-- 多空研究员辩论与研究经理决策
-- 风控三方辩论与基金经理最终决策
-- 报告保存路径
+### 运行过程
+
+点击「开始分析」后，页面会展示本次运行的配置摘要（Ticker、日期、Provider、模型、分析师、辩论/风控轮数），并显示进度条：
+
+<p align="center">
+  <img src="assets/webui_running.png" style="width: 100%; height: auto;">
+</p>
+
+### 运行结果
+
+分析完成后，结果区依次展示：
+
+**1. 最终评级徽章与 Token/成本看板**
+
+<p align="center">
+  <img src="assets/webui_result.png" style="width: 100%; height: auto;">
+</p>
+
+成本看板按层级（deep/quick）和按模型分别统计调用次数、输入/输出 tokens 与估算成本：
+
+<p align="center">
+  <img src="assets/webui_cost_table.png" style="width: 100%; height: auto;">
+</p>
+
+**2. 分析师报告与辩论过程**
+
+各分析师报告、多空研究员辩论、研究经理决策、风控三方辩论均以可折叠面板形式展示：
+
+<p align="center">
+  <img src="assets/webui_reports.png" style="width: 100%; height: auto;">
+</p>
+
+**3. 最终交易决策**
+
+基金经理输出包含 Rating、Executive Summary、Investment Thesis、Price Target、Time Horizon 等字段的最终决策：
+
+<p align="center">
+  <img src="assets/webui_final_decision.png" style="width: 100%; height: auto;">
+</p>
 
 ## 配置参考
 
