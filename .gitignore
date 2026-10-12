@@ -224,3 +224,8 @@ reports/
 
 # Local WorkBuddy project memory / working notes (not source)
 .workbuddy/
+
+mock_backtest/
+
+generate_mock_data.py
+generate_mock_json.py
